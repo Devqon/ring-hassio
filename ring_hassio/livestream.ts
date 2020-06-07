@@ -3,7 +3,7 @@
 import 'dotenv/config'
 import { RingApi } from 'ring-client-api'
 import { promisify } from 'util'
-import { runInNewContext } from 'vm';
+
 const fs = require('fs'),
   path = require('path'),
   http = require('http'),
@@ -19,9 +19,6 @@ const PORT = process.env.RING_PORT;
 
  async function startStream() {
   const ringApi = new RingApi({
-      email: process.env.RING_EMAIL,
-      password: process.env.RING_PASS,
-      // Refresh token is used when 2fa is on
       refreshToken: process.env.RING_REFRESH_TOKEN!,
       debug: true
     }),
@@ -175,12 +172,11 @@ const PORT = process.env.RING_PORT;
   setTimeout(function() {
     console.log('Stopping call...')
     sipSession.stop()
-    
-  }, 10* 60 * 1000) // 10*60*1000 Stop after 10 minutes.
+  }, 60 * 1000) // 60*1000 Stop after 60 seconds.
 }
 
-if(!('RING_EMAIL' in process.env) || !('RING_PASS' in process.env) || !('RING_PORT' in process.env)) {
-  console.log('Missing environment variables. Check RING_EMAIL, RING_PASS and RING_PORT are set.')
+if(!('RING_REFRESH_TOKEN' in process.env) || !('RING_PORT' in process.env)) {
+  console.log('Missing environment variables. Check RING_REFRESH_TOKEN and RING_PORT are set.')
   process.exit()
 }
 else {

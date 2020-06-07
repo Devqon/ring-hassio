@@ -54,9 +54,6 @@ function startStream() {
             switch (_a.label) {
                 case 0:
                     ringApi = new ring_client_api_1.RingApi({
-                        email: process.env.RING_EMAIL,
-                        password: process.env.RING_PASS,
-                        // Refresh token is used when 2fa is on
                         refreshToken: process.env.RING_REFRESH_TOKEN,
                         debug: true
                     });
@@ -205,14 +202,14 @@ function startStream() {
                     setTimeout(function () {
                         console.log('Stopping call...');
                         sipSession.stop();
-                    }, 10 * 60 * 1000); // 10*60*1000 Stop after 10 minutes.
+                    }, 60 * 1000); // 60*1000 Stop after 60 seconds.
                     return [2 /*return*/];
             }
         });
     });
 }
-if (!('RING_EMAIL' in process.env) || !('RING_PASS' in process.env) || !('RING_PORT' in process.env)) {
-    console.log('Missing environment variables. Check RING_EMAIL, RING_PASS and RING_PORT are set.');
+if (!('RING_REFRESH_TOKEN' in process.env) || !('RING_PORT' in process.env)) {
+    console.log('Missing environment variables. Check RING_REFRESH_TOKEN and RING_PORT are set.');
     process.exit();
 }
 else {
